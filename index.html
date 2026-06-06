@@ -205,8 +205,9 @@
     z-index: 1;
     white-space: nowrap;
   }
-  thead th:first-child { width: 44px; text-align: center; }
-  thead th:nth-child(4) { width: 110px; }
+  thead th:first-child  { width: 44px; text-align: center; }
+  thead th:nth-child(2) { width: 200px; }
+  thead th:nth-child(4) { width: 120px; }
   thead th:nth-child(5) { width: 160px; }
 
   tbody tr {
@@ -277,7 +278,7 @@
     header, .controls, .table-wrap { padding-left: 16px; padding-right: 16px; }
     .header-stats { gap: 20px; }
     .stat-num { font-size: 24px; }
-    thead th:nth-child(4), td:nth-child(4) { display: none; }
+    thead th:nth-child(3), td:nth-child(3) { display: none; }
   }
 </style>
 </head>
@@ -347,11 +348,8 @@ function render(rows) {
   tbody.innerHTML = rows.map(r => `
     <tr>
       <td>${r.num}</td>
-      <td>
-        <div class="company-name">${r.company}</div>
-        <div class="position-name">${r.position}</div>
-      </td>
-      <td style="display:none"></td>
+      <td class="company-name">${r.company}</td>
+      <td class="position-name">${r.position}</td>
       <td class="date-cell">${r.date}</td>
       <td><span class="badge ${badgeClass(r.status)}"><span class="badge-dot"></span>${r.status.replace(/^[✅❌]\s*/,'')}</span></td>
     </tr>
