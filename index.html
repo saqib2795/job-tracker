@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Application Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #0f1117;
+    --paper:     #f7f5f0;
+    --cream:     #edeae3;
+    --rule:      #d6d1c8;
+    --accent:    #1a3a5c;
+    --accent2:   #c8a84b;
+    --green-bg:  #e8f5ee;
+    --green-fg:  #1a6b3c;
+    --red-bg:    #fdecea;
+    --red-fg:    #b93030;
+    --amber-bg:  #fef8e7;
+    --amber-fg:  #8a6200;
+    --blue-bg:   #e8f0fa;
+    --blue-fg:   #1a3a8c;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--accent);
+    color: #fff;
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      rgba(255,255,255,.04) 39px,
+      rgba(255,255,255,.04) 40px
+    );
+    pointer-events: none;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent2), transparent);
+  }
+  .header-inner { position: relative; max-width: 1200px; margin: 0 auto; }
+  .header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.5);
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    margin-bottom: 6px;
+  }
+  header h1 em { font-style: italic; color: var(--accent2); }
+  .header-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,.55);
+    font-weight: 300;
+    margin-top: 6px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    line-height: 1;
+    color: #fff;
+  }
+  .stat-num.gold { color: var(--accent2); }
+  .stat-num.green { color: #6ee7a4; }
+  .stat-num.red   { color: #f9a0a0; }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.45);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── Controls ── */
+  .controls {
+    max-width: 1200px;
+    margin: 28px auto 0;
+    padding: 0 40px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    pointer-events: none;
+  }
+  input[type="search"] {
+    width: 100%;
+    padding: 9px 14px 9px 36px;
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    background: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color .15s;
+  }
+  input[type="search"]:focus { border-color: var(--accent); }
+
+  .filter-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--rule);
+    background: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .15s;
+    color: #666;
+    white-space: nowrap;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .filter-btn.active.green  { background: var(--green-fg); border-color: var(--green-fg); }
+  .filter-btn.active.red    { background: var(--red-fg);   border-color: var(--red-fg);   }
+  .filter-btn.active.amber  { background: #b07800;         border-color: #b07800;         }
+
+  .results-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #999;
+    white-space: nowrap;
+    align-self: center;
+    margin-left: auto;
+  }
+
+  /* ── Table ── */
+  .table-wrap {
+    max-width: 1200px;
+    margin: 20px auto 60px;
+    padding: 0 40px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  thead th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #888;
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--rule);
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    white-space: nowrap;
+  }
+  thead th:first-child { width: 44px; text-align: center; }
+  thead th:nth-child(4) { width: 110px; }
+  thead th:nth-child(5) { width: 160px; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--rule);
+    transition: background .1s;
+  }
+  tbody tr:hover { background: var(--cream); }
+  tbody tr.hidden { display: none; }
+
+  td { padding: 11px 12px; vertical-align: middle; line-height: 1.4; }
+  td:first-child {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #bbb;
+    text-align: center;
+  }
+  .company-name { font-weight: 600; color: var(--ink); }
+  .position-name { color: #555; font-size: 13px; margin-top: 2px; }
+  .date-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #888;
+    white-space: nowrap;
+  }
+
+  /* Status badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .badge-applied      { background: var(--green-bg); color: var(--green-fg); }
+  .badge-review       { background: var(--amber-bg); color: var(--amber-fg); }
+  .badge-rejected     { background: var(--red-bg);   color: var(--red-fg);   }
+  .badge-started      { background: var(--blue-bg);  color: var(--blue-fg);  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #aaa;
+  }
+  .empty-state svg { margin-bottom: 12px; opacity: .4; }
+  .empty-state p { font-size: 15px; }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #bbb;
+    border-top: 1px solid var(--rule);
+  }
+
+  @media (max-width: 700px) {
+    header, .controls, .table-wrap { padding-left: 16px; padding-right: 16px; }
+    .header-stats { gap: 20px; }
+    .stat-num { font-size: 24px; }
+    thead th:nth-child(4), td:nth-child(4) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <p class="header-label">Career Intelligence</p>
+    <h1>Job Application <em>Tracker</em></h1>
+    <p class="header-sub">May – June 2026 &nbsp;·&nbsp; Last synced Jun 05, 2026</p>
+    <div class="header-stats">
+      <div class="stat"><span class="stat-num gold" id="stat-total">89</span><span class="stat-label">Total</span></div>
+      <div class="stat"><span class="stat-num green" id="stat-active">—</span><span class="stat-label">Active</span></div>
+      <div class="stat"><span class="stat-num red"   id="stat-rejected">—</span><span class="stat-label">Rejected</span></div>
+      <div class="stat"><span class="stat-num"       id="stat-rate">—</span><span class="stat-label">Response Rate</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="search" id="search" placeholder="Search company or position…" autocomplete="off">
+  </div>
+  <div class="filter-btns">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn green"  data-filter="applied">✅ Applied</button>
+    <button class="filter-btn amber"  data-filter="review">🕐 Under Review</button>
+    <button class="filter-btn red"    data-filter="rejected">❌ Rejected</button>
+  </div>
+  <span class="results-count" id="results-count"></span>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Company</th>
+        <th>Position</th>
+        <th>Date Applied</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="empty-state" id="empty" style="display:none">
+    <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <p>No applications match your search.</p>
+  </div>
+</div>
+
+<footer>Job Application Tracker &nbsp;·&nbsp; Built with Claude &nbsp;·&nbsp; Data synced from Gmail</footer>
+
+<script>
+const DATA = [{"num":1,"company":"OP","position":"Not specified","date":"Jun 01, 2026","status":"\u2705 Applied","notes":""},{"num":2,"company":"Citizens Bank","position":"Consumer Insights Senior Analyst - Communications","date":"May 19, 2026","status":"\u274c Rejected","notes":""},{"num":3,"company":"Citizens Bank","position":"Bus Improvement Consultant","date":"May 21, 2026","status":"\u274c Rejected","notes":""},{"num":4,"company":"Citizens Bank","position":"Principal Credit Risk & Pricing Analyst","date":"May 21, 2026","status":"\u274c Rejected","notes":""},{"num":5,"company":"Citizens Bank","position":"Senior Business Analyst \u2013 Commercial Banking / Treasury Products","date":"May 21, 2026","status":"\u2705 Applied","notes":""},{"num":6,"company":"Thomson Reuters","position":"Lead Business Analyst (JREQ200557)","date":"May 20, 2026","status":"\u274c Rejected","notes":""},{"num":7,"company":"Thomson Reuters","position":"Lead Business Analyst \u2013 Order Capture (JREQ200840)","date":"May 22, 2026","status":"\u274c Rejected","notes":""},{"num":8,"company":"Truist","position":"Process Analyst II","date":"May 28, 2026","status":"\u2705 Applied (under review)","notes":""},{"num":9,"company":"Truist","position":"Wealth Business Analyst III","date":"May 27, 2026","status":"\u2705 Applied (under review)","notes":""},{"num":10,"company":"SS&C Technologies","position":"Senior Analyst \u2013 Enterprise Data and Business Solutions","date":"May 22, 2026","status":"\u274c Rejected","notes":""},{"num":11,"company":"JPMorganChase","position":"Senior Product Associate - Marketing Automation Platforms","date":"May 28, 2026","status":"\u274c Rejected","notes":""},{"num":12,"company":"JPMorganChase","position":"Not specified (Job #210743819)","date":"May 22, 2026","status":"\u274c Rejected","notes":""},{"num":13,"company":"State Street","position":"Performance Analytics Product Development, AVP","date":"May 22, 2026","status":"\u274c Rejected","notes":""},{"num":14,"company":"State Street","position":"Client Service & Advisor Experience, VP \u2013 Wealth Custody","date":"May 19, 2026","status":"\u274c Rejected","notes":""},{"num":15,"company":"State Street","position":"Compliance Tech BA / AI / Machine Learning, AVP","date":"May 18, 2026","status":"\u2705 Applied","notes":""},{"num":16,"company":"Booz Allen Hamilton","position":"Business Analyst, Senior (R0240726)","date":"May 22, 2026","status":"\u274c Rejected","notes":""},{"num":17,"company":"Parsons","position":"Senior Business Analyst (Team Lead) \u2013 Integrator (R181232)","date":"May 22, 2026","status":"\u274c Rejected","notes":""},{"num":18,"company":"Celero Commerce","position":"Senior Business Analyst (Product)","date":"May 18, 2026","status":"\u274c Rejected","notes":""},{"num":19,"company":"Ally Financial","position":"Senior Analyst, Advanced Business Analytics","date":"May 18, 2026","status":"\u274c Rejected","notes":""},{"num":20,"company":"Unisys","position":"Sr Eng Bus Syst Analyst","date":"May 23, 2026","status":"\u2705 Applied (under review)","notes":""},{"num":21,"company":"DaVita","position":"Senior Business Analyst (Revenue Operations) (R0458345)","date":"May 23, 2026","status":"\u2705 Applied","notes":""},{"num":22,"company":"Northwell Health","position":"Senior Product Services & Management Analyst - Epic Healthy Planet","date":"May 22, 2026","status":"\u2705 Applied","notes":""},{"num":23,"company":"Nabors","position":"Senior Business Analyst ERP \u2013 Oracle EBS (P2P)","date":"May 22, 2026","status":"\u2705 Applied","notes":""},{"num":24,"company":"Wintrust","position":"Board Lead/Advanced Business Data Systems Analyst","date":"May 22, 2026","status":"\u274c Rejected","notes":""},{"num":25,"company":"Athene","position":"Business Systems Analyst","date":"May 22, 2026","status":"\u2705 Applied (under review)","notes":""},{"num":26,"company":"Athene","position":"Senior Process Analyst","date":"May 22, 2026","status":"\u2705 Applied (under review)","notes":""},{"num":27,"company":"Athene","position":"Sr Business Intelligence Analyst","date":"May 18, 2026","status":"\u2705 Applied (under review)","notes":""},{"num":28,"company":"Republic Indemnity (Great American Ins.)","position":"Not specified","date":"May 22, 2026","status":"\u2705 Applied","notes":""},{"num":29,"company":"Great American Insurance Group","position":"Not specified","date":"May 18, 2026","status":"\u2705 Applied","notes":""},{"num":30,"company":"SECU","position":"Not specified","date":"May 22, 2026","status":"\u274c Rejected","notes":""},{"num":31,"company":"Deloitte","position":"Sr Consultant - Functional Business Analyst (350256)","date":"May 22, 2026","status":"\u2705 Applied","notes":""},{"num":32,"company":"RBC","position":"Not specified","date":"May 21, 2026","status":"\u2705 Applied","notes":""},{"num":33,"company":"Landmark Credit Union","position":"Business Analyst Sr","date":"May 21, 2026","status":"\u2705 Applied","notes":""},{"num":34,"company":"Daybright Financial","position":"Business Analyst","date":"May 18, 2026","status":"\u2705 Applied","notes":""},{"num":35,"company":"First Citizens Bank","position":"Business Systems Analyst III","date":"May 20, 2026","status":"\u274c Rejected","notes":""},{"num":36,"company":"Fastly","position":"Senior Enterprise Business Systems Analyst","date":"May 20, 2026","status":"\u274c Rejected","notes":""},{"num":37,"company":"HP","position":"Not specified","date":"May 21, 2026","status":"\u2705 Applied","notes":""},{"num":38,"company":"PNC","position":"Business Analytics Consultant Senior (R221176)","date":"May 21, 2026","status":"\u2705 Applied","notes":""},{"num":39,"company":"PNC","position":"Business Systems Analyst Consultant (R222282)","date":"May 21, 2026","status":"\u2705 Applied","notes":""},{"num":40,"company":"PNC","position":"Business Analyst Senior \u2013 Debit Card (R222600)","date":"May 19, 2026","status":"\u2705 Applied","notes":""},{"num":41,"company":"Plaid","position":"Business Operations","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":42,"company":"CGI","position":"Not specified","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":43,"company":"Charles Schwab","position":"Senior Data Product Owner","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":44,"company":"Old National Bank","position":"Application Analyst, Sr","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":45,"company":"Invictus Capital Partners / Verus Mortgage","position":"Senior BA / Product Analyst \u2013 ServiceNow Platform","date":"May 18, 2026","status":"\u2705 Applied","notes":""},{"num":46,"company":"Sammons Financial Group","position":"Business Analyst 4","date":"May 18, 2026","status":"\u274c Rejected","notes":""},{"num":47,"company":"Noblis","position":"Business Systems Analyst IV","date":"May 20, 2026","status":"\u2705 Applied (started)","notes":""},{"num":48,"company":"Morgan Stanley","position":"Asset Movement Platforms Product Owner \u2013 AVP","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":49,"company":"Morgan Stanley","position":"Automation & Workflow Product Owner \u2013 AVP","date":"May 18, 2026","status":"\u2705 Applied","notes":""},{"num":50,"company":"Morgan Stanley","position":"Business Analyst \u2013 Offers Platform, AVP","date":"May 18, 2026","status":"\u2705 Applied","notes":""},{"num":51,"company":"Morgan Stanley","position":"Technical Business Analyst \u2013 VP","date":"May 18, 2026","status":"\u2705 Applied","notes":""},{"num":52,"company":"Corebridge Financial","position":"Not specified (2 roles)","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":53,"company":"nCino","position":"Senior Functional Consultant (R6234)","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":54,"company":"Millennium Management","position":"Business Analyst \u2013 Treasury","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":55,"company":"Koch Engineered Solutions","position":"Not specified","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":56,"company":"Kforce Inc.","position":"Not specified","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":57,"company":"Hawaii State Federal Credit Union","position":"IT Business Systems Analyst III","date":"May 20, 2026","status":"\u2705 Applied","notes":""},{"num":58,"company":"Motiva Enterprises","position":"Sr. Business Systems Analyst","date":"May 19, 2026","status":"\u274c Rejected","notes":""},{"num":59,"company":"Brandt Information Services","position":"Not specified","date":"May 19, 2026","status":"\u2705 Applied","notes":""},{"num":60,"company":"FIS Global","position":"Analyst Senior, Revenue Operations (JR0306176)","date":"May 19, 2026","status":"\u274c Rejected","notes":""},{"num":61,"company":"Broadridge","position":"Senior Client Implementation Specialist","date":"May 19, 2026","status":"\u2705 Applied","notes":""},{"num":62,"company":"Regions Bank","position":"Consumer Process Transformation Partner","date":"May 18, 2026","status":"\u274c Rejected","notes":""},{"num":63,"company":"ZenBusiness","position":"Senior Business Systems Analyst","date":"May 18, 2026","status":"\u2705 Applied","notes":""},{"num":64,"company":"Allied Benefit Systems","position":"Senior Technical Business Analyst","date":"May 19, 2026","status":"\u2705 Applied","notes":""},{"num":65,"company":"Incedo Inc.","position":"Not specified (2 applications)","date":"May 18, 2026","status":"\u2705 Applied","notes":""},{"num":66,"company":"Komatsu","position":"Senior Business Analyst","date":"May 18, 2026","status":"\u274c Rejected","notes":""},{"num":67,"company":"AmTrust Group","position":"Business Systems Analyst III","date":"May 20, 2026","status":"\u2705 Applied (started)","notes":""},{"num":68,"company":"Slalom","position":"Anaplan or Pigment Business Planning Solution Architect - Enterprise","date":"Jun 01, 2026","status":"\u2705 Applied","notes":""},{"num":69,"company":"ENGIE North America","position":"Business Analyst Advisor (Ref. 62769)","date":"Jun 01, 2026","status":"\u2705 Applied","notes":""},{"num":70,"company":"Sysco","position":"Senior Functional Analyst - Corporate - US (R233640)","date":"Jun 01, 2026","status":"\u2705 Applied","notes":""},{"num":71,"company":"The Lab Consulting","position":"Not specified","date":"Jun 01, 2026","status":"\u2705 Applied","notes":""},{"num":72,"company":"Mastercard","position":"Senior Business Analyst","date":"Jun 02, 2026","status":"\u274c Rejected","notes":""},{"num":73,"company":"Versique","position":"Not specified","date":"Jun 02, 2026","status":"\u2705 Applied","notes":""},{"num":74,"company":"Lowe's","position":"Services Sr Analyst","date":"Jun 02, 2026","status":"\u2705 Applied","notes":""},{"num":75,"company":"CapTech","position":"Senior Technical Business Systems Analyst (Denver, CO)","date":"Jun 02, 2026","status":"\u2705 Applied","notes":""},{"num":76,"company":"CapTech","position":"Senior Technical Business Systems Analyst (Salt Lake City, UT)","date":"Jun 02, 2026","status":"\u2705 Applied","notes":""},{"num":77,"company":"Corebridge Financial","position":"Business Systems and Control Coordinator","date":"Jun 02, 2026","status":"\u274c Rejected","notes":""},{"num":78,"company":"JPMorganChase","position":"Product Analyst (Job #210736222)","date":"May 22, 2026","status":"\u274c Rejected","notes":""},{"num":79,"company":"Motiva Enterprises","position":"Senior Business Analyst - 3003503","date":"May 19, 2026","status":"\u2705 Applied","notes":""},{"num":80,"company":"Unknown","position":"Staff Business Analyst - 3003673","date":"Jun 02, 2026","status":"\u2705 Applied","notes":""},{"num":81,"company":"High5","position":"Not specified","date":"Jun 03, 2026","status":"\u2705 Applied","notes":""},{"num":82,"company":"The Joint Commission","position":"Sr Business Systems Analyst","date":"Jun 03, 2026","status":"\u2705 Applied","notes":""},{"num":83,"company":"Vizient","position":"Senior Platform Analyst (33642R)","date":"Jun 03, 2026","status":"\u2705 Applied","notes":""},{"num":84,"company":"IntePros","position":"Not specified","date":"Jun 05, 2026","status":"\u2705 Applied","notes":""},{"num":85,"company":"US Bank","position":"Senior Business Systems Analyst","date":"Jun 05, 2026","status":"\u2705 Applied","notes":""},{"num":86,"company":"The Standard","position":"Not specified","date":"Jun 05, 2026","status":"\u2705 Applied","notes":""},{"num":87,"company":"Uline","position":"Not specified","date":"Jun 05, 2026","status":"\u2705 Applied","notes":""},{"num":88,"company":"SpaceX","position":"Sr. Business Analyst (Starlink Enterprise)","date":"Jun 05, 2026","status":"\u2705 Applied","notes":""},{"num":89,"company":"Lowe's","position":"Sr Analyst - Merchandising Operations","date":"Jun 05, 2026","status":"\u2705 Applied","notes":""}];
+
+function badgeClass(s) {
+  if (s.includes('under review')) return 'badge-review';
+  if (s.includes('started'))      return 'badge-started';
+  if (s.includes('Rejected'))     return 'badge-rejected';
+  return 'badge-applied';
+}
+
+function render(rows) {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.num}</td>
+      <td>
+        <div class="company-name">${r.company}</div>
+        <div class="position-name">${r.position}</div>
+      </td>
+      <td style="display:none"></td>
+      <td class="date-cell">${r.date}</td>
+      <td><span class="badge ${badgeClass(r.status)}"><span class="badge-dot"></span>${r.status.replace(/^[✅❌]\s*/,'')}</span></td>
+    </tr>
+  `).join('');
+
+  // Update stats
+  const total    = DATA.length;
+  const rejected = DATA.filter(r => r.status.includes('Rejected')).length;
+  const active   = total - rejected;
+  const rate     = Math.round(rejected / total * 100) + '%';
+  document.getElementById('stat-total').textContent    = total;
+  document.getElementById('stat-active').textContent   = active;
+  document.getElementById('stat-rejected').textContent = rejected;
+  document.getElementById('stat-rate').textContent     = rate;
+  document.getElementById('results-count').textContent = rows.length === DATA.length ? `${total} applications` : `${rows.length} of ${total}`;
+  document.getElementById('empty').style.display = rows.length === 0 ? 'block' : 'none';
+}
+
+let currentFilter = 'all';
+let currentSearch = '';
+
+function applyFilters() {
+  let rows = DATA;
+  if (currentFilter === 'applied')  rows = rows.filter(r => r.status.includes('Applied') && !r.status.includes('review') && !r.status.includes('started'));
+  if (currentFilter === 'review')   rows = rows.filter(r => r.status.includes('review') || r.status.includes('started'));
+  if (currentFilter === 'rejected') rows = rows.filter(r => r.status.includes('Rejected'));
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    rows = rows.filter(r => r.company.toLowerCase().includes(q) || r.position.toLowerCase().includes(q));
+  }
+  render(rows);
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    applyFilters();
+  });
+});
+
+document.getElementById('search').addEventListener('input', e => {
+  currentSearch = e.target.value.trim();
+  applyFilters();
+});
+
+applyFilters();
+</script>
+</body>
+</html>
