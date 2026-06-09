@@ -10,6 +10,8 @@
   :root{--ink:#0f1117;--paper:#f7f5f0;--cream:#edeae3;--rule:#d6d1c8;--accent:#1a3a5c;--accent2:#c8a84b;--green-bg:#e8f5ee;--green-fg:#1a6b3c;--red-bg:#fdecea;--red-fg:#b93030;--amber-bg:#fef8e7;--amber-fg:#8a6200}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   body{font-family:"Outfit",sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+
+  /* Header */
   header{background:var(--accent);color:#fff;padding:48px 40px 36px;position:relative;overflow:hidden}
   header::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.04) 39px,rgba(255,255,255,.04) 40px);pointer-events:none}
   header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent2),transparent)}
@@ -28,6 +30,8 @@
   .sync-dot.loading{background:var(--accent2);animation:pulse 1s infinite}
   .sync-dot.error{background:#f9a0a0}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  /* Controls */
   .controls{max-width:1200px;margin:28px auto 0;padding:0 40px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
   .search-wrap{position:relative;flex:1;min-width:200px}
   .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#999;pointer-events:none}
@@ -41,7 +45,9 @@
   .filter-btn.active.red{background:var(--red-fg);border-color:var(--red-fg)}
   .filter-btn.active.amber{background:#b07800;border-color:#b07800}
   .results-count{font-family:"DM Mono",monospace;font-size:12px;color:#999;white-space:nowrap;align-self:center;margin-left:auto}
-  .table-wrap{max-width:1200px;margin:20px auto 60px;padding:0 40px}
+
+  /* Table */
+  .table-wrap{max-width:1200px;margin:20px auto 0;padding:0 40px}
   table{width:100%;border-collapse:collapse;font-size:13.5px}
   thead th{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#888;text-align:left;padding:10px 12px;border-bottom:2px solid var(--rule);background:var(--paper);position:sticky;top:0;z-index:1;white-space:nowrap}
   thead th:first-child{width:44px;text-align:center}
@@ -60,25 +66,52 @@
   .badge-review{background:var(--amber-bg);color:var(--amber-fg)}
   .badge-rejected{background:var(--red-bg);color:var(--red-fg)}
   .badge-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+  /* Pagination */
+  .pagination{max-width:1200px;margin:24px auto 60px;padding:0 40px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+  .page-info{font-family:"DM Mono",monospace;font-size:12px;color:#999;margin:0 12px}
+  .pg-btn{min-width:36px;height:36px;padding:0 10px;border-radius:8px;border:1.5px solid var(--rule);background:#fff;font-family:"Outfit",sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;color:#666;display:flex;align-items:center;justify-content:center;gap:4px}
+  .pg-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+  .pg-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .pg-btn:disabled{opacity:.35;cursor:not-allowed}
+  .pg-btn.pg-ellipsis{cursor:default;border-color:transparent;background:transparent;color:#aaa}
+  .pg-btn.pg-ellipsis:hover{border-color:transparent;color:#aaa}
+
+  /* Skeleton */
   .skel{height:12px;border-radius:6px;background:linear-gradient(90deg,#e8e4dd 25%,#f0ece5 50%,#e8e4dd 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
   @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+  /* Empty / error */
   .empty-state{text-align:center;padding:60px 20px;color:#aaa}
   .empty-state p{font-size:15px;margin-top:8px}
   .err-detail{font-size:12px;font-family:"DM Mono",monospace;margin-top:8px;color:#ccc;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7}
+
   /* Setup banner */
-  .setup-banner{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:16px 20px;margin:24px auto;max-width:1200px;margin-left:40px;margin-right:40px;font-size:14px;line-height:1.6;color:#664d03}
+  .setup-banner{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:16px 20px;margin:24px 40px;font-size:14px;line-height:1.6;color:#664d03;max-width:1120px;margin-left:auto;margin-right:auto}
   .setup-banner strong{display:block;margin-bottom:6px;font-size:15px}
   .setup-banner code{background:rgba(0,0,0,.07);padding:1px 5px;border-radius:3px;font-family:"DM Mono",monospace;font-size:12px}
+  .setup-banner input{width:100%;padding:8px 10px;border:1.5px solid #ffc107;border-radius:6px;font-size:13px;font-family:"DM Mono",monospace;margin-top:4px}
+  .setup-banner button{margin-top:8px;padding:7px 16px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px}
+
   footer{text-align:center;padding:20px;font-family:"DM Mono",monospace;font-size:11px;color:#bbb;border-top:1px solid var(--rule)}
-  @media(max-width:700px){header,.controls,.table-wrap,.setup-banner{padding-left:16px;padding-right:16px}.header-stats{gap:20px}.stat-num{font-size:24px}table{font-size:11.5px}td,thead th{padding:8px 5px}.company-name{font-size:12px}.position-name{font-size:11px}.date-cell{font-size:11px}.badge{padding:3px 7px;font-size:10.5px}}
+
+  @media(max-width:700px){
+    header,.controls,.table-wrap,.pagination,.setup-banner{padding-left:16px;padding-right:16px}
+    .header-stats{gap:20px}.stat-num{font-size:24px}
+    table{font-size:11.5px}td,thead th{padding:8px 5px}
+    .company-name{font-size:12px}.position-name{font-size:11px}
+    .date-cell{font-size:11px}.badge{padding:3px 7px;font-size:10.5px}
+    .pg-btn{min-width:32px;height:32px;font-size:12px}
+  }
 </style>
 </head>
 <body>
+
 <header>
   <div class="header-inner">
     <p class="header-label">Career Intelligence</p>
     <h1>Job Application <em>Tracker</em></h1>
-    <p class="header-sub" id="header-sub">May – June 2026 &nbsp;·&nbsp; Loading…</p>
+    <p class="header-sub" id="header-sub">Loading…</p>
     <div class="header-stats">
       <div class="stat"><span class="stat-num gold" id="stat-total">—</span><span class="stat-label">Total</span></div>
       <div class="stat"><span class="stat-num green" id="stat-active">—</span><span class="stat-label">Active</span></div>
@@ -87,20 +120,17 @@
     </div>
     <div class="sync-bar">
       <span class="sync-dot loading" id="sync-dot"></span>
-      <span id="sync-text">Fetching latest data…</span>
+      <span id="sync-text">Fetching latest data from Google Sheets…</span>
     </div>
   </div>
 </header>
 
-<!-- Setup banner — hidden once URL is configured -->
 <div class="setup-banner" id="setup-banner" style="display:none">
   <strong>⚙️ One-time setup required</strong>
-  To enable live data sync, paste your Apps Script Web App URL below and click Save.
-  See <code>SheetAPI.gs</code> for deployment instructions.
+  Deploy <code>SheetAPI.gs</code> as a Google Apps Script Web App, then paste the URL below.
   <br><br>
-  <input type="text" id="url-input" placeholder="https://script.google.com/macros/s/…/exec"
-    style="width:100%;padding:8px 10px;border:1.5px solid #ffc107;border-radius:6px;font-size:13px;font-family:'DM Mono',monospace;margin-top:4px">
-  <button onclick="saveUrl()" style="margin-top:8px;padding:7px 16px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px">Save &amp; Load Data</button>
+  <input type="text" id="url-input" placeholder="https://script.google.com/macros/s/…/exec">
+  <button onclick="saveUrl()">Save &amp; Load Data</button>
 </div>
 
 <div class="controls">
@@ -116,9 +146,12 @@
   </div>
   <span class="results-count" id="results-count"></span>
 </div>
+
 <div class="table-wrap">
   <table>
-    <thead><tr><th>#</th><th>Company</th><th>Position</th><th>Date Applied</th><th>Status</th></tr></thead>
+    <thead>
+      <tr><th>#</th><th>Company</th><th>Position</th><th>Date Applied</th><th>Status</th></tr>
+    </thead>
     <tbody id="tbody">
       <tr><td></td><td><div class="skel" style="width:120px"></div></td><td><div class="skel" style="width:220px"></div></td><td><div class="skel" style="width:80px"></div></td><td><div class="skel" style="width:90px"></div></td></tr>
       <tr><td></td><td><div class="skel" style="width:150px"></div></td><td><div class="skel" style="width:180px"></div></td><td><div class="skel" style="width:80px"></div></td><td><div class="skel" style="width:90px"></div></td></tr>
@@ -132,29 +165,33 @@
     <p class="err-detail" id="empty-err"></p>
   </div>
 </div>
+
+<div class="pagination" id="pagination"></div>
+
 <footer>Job Application Tracker &nbsp;·&nbsp; Live data from Google Sheets &nbsp;·&nbsp; Built with Claude</footer>
 
 <script>
-// ── Config ────────────────────────────────────────────────────
-// Paste your Apps Script Web App URL here after deploying SheetAPI.gs
-// OR enter it in the setup banner that appears on first load
-const HARDCODED_URL = 'https://script.google.com/macros/s/AKfycbwxF6iyUNQQSvJgNfvDlgY6XTS93CXxyFcXekvXpemx2XjSb9cp9VEkiNcmVX9zb3xOVg/exec'; // e.g. 'https://script.google.com/macros/s/ABC123/exec'
+// ── Config ─────────────────────────────────────────────────────
+// After deploying SheetAPI.gs, paste your Web App URL here:
+const HARDCODED_URL = 'https://script.google.com/macros/s/AKfycbwxF6iyUNQQSvJgNfvDlgY6XTS93CXxyFcXekvXpemx2XjSb9cp9VEkiNcmVX9zb3xOVg/exec';
+const STORAGE_KEY   = 'jobTrackerApiUrl';
+const PAGE_SIZE     = 50;
 
-const STORAGE_KEY = 'jobTrackerApiUrl';
-
-let DATA = [];
+// ── State ───────────────────────────────────────────────────────
+let DATA          = [];   // full dataset from sheet
+let filteredData  = [];   // after search + filter
+let currentPage   = 1;
 let currentFilter = 'all';
 let currentSearch = '';
 
-// ── Get API URL ───────────────────────────────────────────────
+// ── URL management ───────────────────────────────────────────────
 function getApiUrl() {
   return HARDCODED_URL || localStorage.getItem(STORAGE_KEY) || '';
 }
-
 function saveUrl() {
   const val = document.getElementById('url-input').value.trim();
   if (!val.startsWith('https://script.google.com')) {
-    alert('Please enter a valid Apps Script Web App URL starting with https://script.google.com');
+    alert('Please enter a valid Apps Script Web App URL.');
     return;
   }
   localStorage.setItem(STORAGE_KEY, val);
@@ -162,21 +199,19 @@ function saveUrl() {
   fetchData(val);
 }
 
-// ── Fetch ─────────────────────────────────────────────────────
+// ── Fetch from Apps Script Web App ───────────────────────────────
 async function fetchData(url) {
   url = url || getApiUrl();
   if (!url) {
-    // No URL configured — show setup banner
     document.getElementById('setup-banner').style.display = 'block';
     document.getElementById('tbody').innerHTML = '';
-    setSyncStatus('error', 'Apps Script URL not configured — see setup banner above.');
+    setSyncStatus('error', 'Apps Script URL not configured — see setup above.');
     return;
   }
-
   setSyncStatus('loading', 'Fetching latest data from Google Sheets…');
   try {
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status} — check the Web App is deployed with "Anyone" access`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
     if (json.error) throw new Error(json.error);
 
@@ -187,18 +222,169 @@ async function fetchData(url) {
     setSyncStatus('ok', `Synced · ${now}`);
     document.getElementById('header-sub').textContent = `May – June 2026 · ${DATA.length} applications`;
     document.getElementById('setup-banner').style.display = 'none';
-    renderTable();
+
+    // Update header stats from full dataset
+    updateStats(DATA);
+
+    // Apply current filter/search and render
+    currentPage = 1;
+    applyFilters();
+
   } catch (err) {
-    console.error('Fetch error:', err);
+    console.error(err);
     setSyncStatus('error', 'Could not load data.');
     document.getElementById('tbody').innerHTML = '';
+    document.getElementById('pagination').innerHTML = '';
     document.getElementById('empty').style.display = 'block';
     document.getElementById('empty-msg').textContent = 'Unable to load data from Google Sheets.';
     document.getElementById('empty-err').textContent = err.message;
   }
 }
 
-// ── Render ────────────────────────────────────────────────────
+// ── Filter + search ───────────────────────────────────────────────
+function applyFilters() {
+  filteredData = DATA;
+
+  if (currentFilter === 'applied')
+    filteredData = filteredData.filter(r =>
+      r.status.toLowerCase().includes('applied') &&
+      !r.status.toLowerCase().includes('review') &&
+      !r.status.toLowerCase().includes('started'));
+  if (currentFilter === 'review')
+    filteredData = filteredData.filter(r =>
+      r.status.toLowerCase().includes('review') ||
+      r.status.toLowerCase().includes('started'));
+  if (currentFilter === 'rejected')
+    filteredData = filteredData.filter(r =>
+      r.status.toLowerCase().includes('rejected'));
+
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    filteredData = filteredData.filter(r =>
+      r.company.toLowerCase().includes(q) ||
+      r.position.toLowerCase().includes(q));
+  }
+
+  // Reset to page 1 on new filter/search
+  currentPage = 1;
+  renderPage();
+}
+
+// ── Render current page ────────────────────────────────────────────
+function renderPage() {
+  const total      = filteredData.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  // Clamp currentPage
+  if (currentPage < 1) currentPage = 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end   = Math.min(start + PAGE_SIZE, total);
+  const pageRows = filteredData.slice(start, end);
+
+  // Results count
+  document.getElementById('results-count').textContent =
+    total === 0 ? '' :
+    total <= PAGE_SIZE ? `${total} application${total !== 1 ? 's' : ''}` :
+    `${start + 1}–${end} of ${total}`;
+
+  // Empty state
+  const emptyEl = document.getElementById('empty');
+  if (total === 0 && DATA.length > 0) {
+    emptyEl.style.display = 'block';
+    document.getElementById('empty-msg').textContent = 'No applications match your search.';
+    document.getElementById('empty-err').textContent = '';
+  } else {
+    emptyEl.style.display = 'none';
+  }
+
+  // Table rows
+  document.getElementById('tbody').innerHTML = pageRows.map(r => `
+    <tr>
+      <td>${r.num}</td>
+      <td class="company-name">${escHtml(r.company)}</td>
+      <td class="position-name">${escHtml(r.position)}</td>
+      <td class="date-cell">${escHtml(r.date)}</td>
+      <td><span class="badge ${badgeClass(r.status)}"><span class="badge-dot"></span>${escHtml(badgeLabel(r.status))}</span></td>
+    </tr>`).join('');
+
+  // Pagination controls
+  renderPagination(totalPages);
+}
+
+// ── Pagination controls ────────────────────────────────────────────
+function renderPagination(totalPages) {
+  const pg = document.getElementById('pagination');
+  if (totalPages <= 1) { pg.innerHTML = ''; return; }
+
+  const pages = getPageNumbers(currentPage, totalPages);
+  let html = '';
+
+  // Prev button
+  html += `<button class="pg-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    Prev
+  </button>`;
+
+  // Page number buttons
+  for (const p of pages) {
+    if (p === '...') {
+      html += `<button class="pg-btn pg-ellipsis" disabled>…</button>`;
+    } else {
+      html += `<button class="pg-btn ${p === currentPage ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
+    }
+  }
+
+  // Next button
+  html += `<button class="pg-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+    Next
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+  </button>`;
+
+  // Page info
+  html += `<span class="page-info">Page ${currentPage} of ${totalPages}</span>`;
+
+  pg.innerHTML = html;
+}
+
+// Generate page number array with ellipsis e.g. [1, '...', 4, 5, 6, '...', 12]
+function getPageNumbers(current, total) {
+  if (total <= 7) return Array.from({length: total}, (_, i) => i + 1);
+  const pages = [];
+  const delta = 2; // pages around current
+
+  const left  = Math.max(2, current - delta);
+  const right = Math.min(total - 1, current + delta);
+
+  pages.push(1);
+  if (left > 2)       pages.push('...');
+  for (let i = left; i <= right; i++) pages.push(i);
+  if (right < total - 1) pages.push('...');
+  pages.push(total);
+
+  return pages;
+}
+
+function goToPage(page) {
+  currentPage = page;
+  renderPage();
+  // Scroll to top of table
+  document.querySelector('.table-wrap').scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+
+// ── Stats (always from full DATA, not filtered) ────────────────────
+function updateStats(rows) {
+  const total    = rows.length;
+  const rejected = rows.filter(r => r.status.toLowerCase().includes('rejected')).length;
+  const active   = total - rejected;
+  document.getElementById('stat-total').textContent    = total;
+  document.getElementById('stat-active').textContent   = active;
+  document.getElementById('stat-rejected').textContent = rejected;
+  document.getElementById('stat-rate').textContent     = total > 0 ? Math.round(rejected / total * 100) + '%' : '—';
+}
+
+// ── Helpers ────────────────────────────────────────────────────────
 function badgeClass(s) {
   const sl = (s || '').toLowerCase();
   if (sl.includes('under review') || sl.includes('started')) return 'badge-review';
@@ -206,69 +392,31 @@ function badgeClass(s) {
   return 'badge-applied';
 }
 function badgeLabel(s) { return (s || '').replace(/^[✅❌🕐]\s*/, '').trim(); }
-
-function renderTable() {
-  let rows = DATA;
-  if (currentFilter === 'applied')
-    rows = rows.filter(r => r.status.toLowerCase().includes('applied') &&
-                            !r.status.toLowerCase().includes('review') &&
-                            !r.status.toLowerCase().includes('started'));
-  if (currentFilter === 'review')
-    rows = rows.filter(r => r.status.toLowerCase().includes('review') ||
-                            r.status.toLowerCase().includes('started'));
-  if (currentFilter === 'rejected')
-    rows = rows.filter(r => r.status.toLowerCase().includes('rejected'));
-  if (currentSearch) {
-    const q = currentSearch.toLowerCase();
-    rows = rows.filter(r => r.company.toLowerCase().includes(q) || r.position.toLowerCase().includes(q));
-  }
-
-  const total    = DATA.length;
-  const rejected = DATA.filter(r => r.status.toLowerCase().includes('rejected')).length;
-  const active   = total - rejected;
-
-  document.getElementById('stat-total').textContent    = total;
-  document.getElementById('stat-active').textContent   = active;
-  document.getElementById('stat-rejected').textContent = rejected;
-  document.getElementById('stat-rate').textContent     = total > 0 ? Math.round(rejected / total * 100) + '%' : '—';
-  document.getElementById('results-count').textContent =
-    rows.length === DATA.length ? `${total} applications` : `${rows.length} of ${total}`;
-  document.getElementById('empty').style.display = (rows.length === 0 && DATA.length > 0) ? 'block' : 'none';
-  if (rows.length === 0 && DATA.length > 0) {
-    document.getElementById('empty-msg').textContent = 'No applications match your search.';
-    document.getElementById('empty-err').textContent = '';
-  }
-
-  document.getElementById('tbody').innerHTML = rows.map(r => `
-    <tr>
-      <td>${r.num}</td>
-      <td class="company-name">${r.company}</td>
-      <td class="position-name">${r.position}</td>
-      <td class="date-cell">${r.date}</td>
-      <td><span class="badge ${badgeClass(r.status)}"><span class="badge-dot"></span>${badgeLabel(r.status)}</span></td>
-    </tr>`).join('');
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
 function setSyncStatus(state, text) {
   document.getElementById('sync-dot').className =
     'sync-dot' + (state === 'loading' ? ' loading' : state === 'error' ? ' error' : '');
   document.getElementById('sync-text').textContent = text;
 }
 
-// ── Events ────────────────────────────────────────────────────
+// ── Event listeners ────────────────────────────────────────────────
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
-    renderTable();
+    applyFilters();
   });
 });
+
 document.getElementById('search').addEventListener('input', e => {
   currentSearch = e.target.value.trim();
-  renderTable();
+  applyFilters();
 });
 
+// ── Boot ───────────────────────────────────────────────────────────
 fetchData();
 </script>
 </body>
